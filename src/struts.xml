@@ -1,0 +1,30 @@
+<!DOCTYPE struts PUBLIC 
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org//dtds/struts-2.3.dtd">
+	
+<struts>
+	<!-- 定义逻辑视图与物理视图之间的联系 -->
+	<constant name="struts.multipart.maxSize" value="200000000"></constant>
+	<package name="mypackage" extends="struts-default" namespace="/">
+		<action name="loadfeature" class="com.action.LoadFeaturesAction">
+			<result name="success">featureselect.jsp</result>
+		</action>
+		<action name="getFeatureKey" class="com.action.GetFeatureKey" method="gainFeatureKey">
+			<result name="getFeatureKey">stage.jsp</result>
+		</action>
+		<action name="decisiontree" class="com.action.ML_DecisionTree" method="execute">
+			<result name="success">ml_decisiontree.jsp</result>
+		</action>
+		<action name="svm" class="com.action.SupportVectorMachine" method="execute">
+			<result name="success">svm_result.jsp</result>
+		</action>
+		<action name="randomForest" class="com.action.RandomForest" method="execute">
+			<result name="success">randomForest_result.jsp</result>
+		</action>
+		<action name="test" class="com.action.test">
+			<result name="success">test.jsp</result>
+		</action>
+		
+	</package>
+	<include file="file.xml"/>
+</struts>
