@@ -1,9 +1,7 @@
 import sys
 import json
-print("enter data_ml_svm.py")
 pythonPath = sys.argv[1]
 parameters = sys.argv[2].replace('[','').replace(']','').replace(' ','').split(",")
-print('parameters->',parameters)
 # get all parameters
 C,kernel,degree,gamma,coef0,probability,shrinking,tol,max_iter = parameters;
 
@@ -57,8 +55,6 @@ else:
 	shrinking = True
 
 #----------------------------------------------------------------------------
-print("这些参数分别是：")
-print(C,kernel,degree,gamma,coef0,probability,shrinking,tol,max_iter)
 print(type(C),type(kernel),type(degree),type(gamma),type(coef0),type(probability),type(shrinking),type(tol),type(max_iter))
 with open(pythonPath+'/sample_X_final.json','r') as f:
 	sample=json.load(f)
@@ -71,10 +67,8 @@ n_samples = len(sample)
 from sklearn import svm,metrics
 from sklearn.cross_validation import train_test_split
 X_train,X_test,y_train,y_test = train_test_split(sample,stage,test_size=0.3,random_state=0)
-print(1)
 classifier = svm.SVC(C=C,kernel=kernel,degree=degree,gamma=gamma,coef0=coef0,probability=probability,shrinking=shrinking,tol=tol,max_iter=max_iter)
 classifier.fit(X_train,y_train)
-print(3)
 
 expected = y_test
 predicted = classifier.predict(X_test)
@@ -88,5 +82,11 @@ print(accuracy)
 # expected = stage[n_samples//2:]
 # predicted = classifier.predict(sample[n_samples//2:])
 
-print("classifier report report for classifier %s:\n%s\n"%(classifier,metrics.classification_report(expected,predicted)))
+# 分类器参数
+print(classifier.get_params())
+
+# 分类情况报告
+print(metrics.classification_report(expected,predicted))
+
+# print("classifier report report for classifier %s:\n%s\n"%(classifier,metrics.classification_report(expected,predicted)))
 # print("Confusion matrix :\n%s"%metrics.confusion_matrix(expected,predicted))
