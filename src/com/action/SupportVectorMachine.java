@@ -81,7 +81,7 @@ public class SupportVectorMachine extends ActionSupport {
 			Pattern pattern = Pattern.compile("([0-9]\\d*\\.?\\d*)");
 			Matcher m;
 			while((line = in.readLine()) != null){
-				System.out.println("a python retuen line:"+line);
+//				System.out.println("a python retuen line:"+line);
 				if(isKeyline < 2){
 					if(line.equals("")){
 						isKeyline += 1;
@@ -113,9 +113,9 @@ public class SupportVectorMachine extends ActionSupport {
 			}
 			in.close();
 			pr.waitFor();
-			for(Consequence consequence:consequences){
-				System.out.println(consequence.getPrecision() + " " + consequence.getRecall() + " " + consequence.getFscore() + " " + consequence.getSupport());
-			}
+//			for(Consequence consequence:consequences){
+//				System.out.println(consequence.getPrecision() + " " + consequence.getRecall() + " " + consequence.getFscore() + " " + consequence.getSupport());
+//			}
 		    this.setConsequences(consequences);
 			
 //			ObjectMapper objectMapper=new ObjectMapper();

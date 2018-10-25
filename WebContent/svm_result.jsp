@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Insert title here</title>
+<title>SVM Result</title>
 <style type="text/css">
 	body {
 	    margin: 0;
@@ -151,9 +151,62 @@
 	 /*by wzj end*/
 </style>
 </head>
+<script type="text/javascript" src="echarts-2.2.7/build/dist/echarts.js"></script> 
+<script type="text/JavaScript" src="js/jquery.js"></script>
+<script type="text/javascript">
+
+	require.config({
+	    paths: {
+	        echarts: 'echarts-2.2.7/build/dist'
+	    }
+	});
+	require(
+	    [
+	        'echarts',
+	        'echarts/chart/bar'
+	    ],
+	    function (ec) {
+	        var myChart = ec.init(document.getElementById('main')); 
+	        var consequences = "${consequences}";
+	        var array = new Array();
+			var arrayPrecision = new Array();
+			var arrayRecall = new Array();
+			var arrayFscore = new Array();
+			for (var i=1;i<=consequences.length;i++)
+			{
+				array[i-1] = "Stage " + i;
+			}
+	        var option = {
+	            tooltip: {
+	                show: true
+	            },
+	            legend: {
+	                data:['销量']
+	            },
+	            xAxis : [
+	                {
+	                    type : 'category',
+	                    data : array
+	                }
+	            ],
+	            yAxis : [
+	                {
+	                    type : 'value'
+	                }
+	            ],
+	            series : [
+	                {
+	                    "name":"销量",
+	                    "type":"bar",
+	                    "data":[5, 20, 40, 10]
+	                }
+	            ]
+	        };
+	        myChart.setOption(option); 
+	    }
+	);
+</script>
 <body style="height:100%">
-	<script type="text/javascript">
-	</script>
 	<div style="display:block">
 		<nav>
 			<ul id="menu_list">
@@ -199,9 +252,10 @@
 						${t.support}
 					</td> 				
 				</tr>
-	    	</c:forEach> 
+	    	</c:forEach>
     	</table>
 	</div>
+	<div id="main" style="height:400px"></div>
 	<!-- /#wrapper -->
 	<div class="fot_wrap">
 		<div class="footer"> 
