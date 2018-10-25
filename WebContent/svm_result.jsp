@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>   
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -151,6 +152,8 @@
 </style>
 </head>
 <body style="height:100%">
+	<script type="text/javascript">
+	</script>
 	<div style="display:block">
 		<nav>
 			<ul id="menu_list">
@@ -160,7 +163,44 @@
 				<li><a href="ml_randomForest.jsp">随机森林</a></li>
 			</ul>
 		</nav>
-		支持向量机模型构建完成
+		支持向量机模型构建完成<br>
+
+		<table style="width:100%;border:1px white solid">  
+			<tr bgcolor="#4F81BD"style="color: #fff;">
+				<th style="text-align: center"></th>
+				<th style="text-align: center">
+					precision
+				</th>
+				<th style="text-align: center">
+					recall
+				</th>
+				<th style="text-align: center">
+					f1-score
+				</th>
+				<th style="text-align: center">
+					support
+				</th>
+			</tr>
+			<c:forEach items="${consequences}" var="t" varStatus="status">
+				<tr bgcolor="${status.index%2 == 0?'#D0D8E8':'#E9EDF4'}">     
+					<td align="center">
+						Stage ${status.index + 1}
+					</td>
+					<td align="center">
+						${t.precision}
+					</td>
+					<td align="center">
+						${t.recall}
+					</td>
+					<td align="center">
+						${t.fscore}
+					</td>
+					<td align="center">
+						${t.support}
+					</td> 				
+				</tr>
+	    	</c:forEach> 
+    	</table>
 	</div>
 	<!-- /#wrapper -->
 	<div class="fot_wrap">

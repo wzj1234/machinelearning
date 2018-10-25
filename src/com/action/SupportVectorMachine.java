@@ -4,9 +4,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.regex.*;
 import org.apache.struts2.ServletActionContext;
 
+import com.entry.Consequence;
 import com.opensymphony.xwork2.ActionSupport;
 import com.preprocessing.Pretreatment;
 
@@ -22,7 +23,8 @@ public class SupportVectorMachine extends ActionSupport {
 	private String max_iter;
 	private String[] pretreatment;
 	public List<String> paramlist;
-	private List<String> ls;          //从python文件拿回来的结果
+	List<Consequence> consequences = new ArrayList<>();
+	private String consequencesJsonStr;
 	public String execute(){
 		System.out.println("enter SupportVectorMachine");
 		try {
@@ -75,31 +77,55 @@ public class SupportVectorMachine extends ActionSupport {
 			Process pr = Runtime.getRuntime().exec(args);
 			BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream()));
 			String line;
-			List<String> ls = new ArrayList<String>();
+			int isKeyline = 0;
+			Pattern pattern = Pattern.compile("([0-9]\\d*\\.?\\d*)");
+			Matcher m;
 			while((line = in.readLine()) != null){
-//                line = decodeUnicode(line);
-//				ls.add(line);
-				System.out.println(line);
+				System.out.println("a python retuen line:"+line);
+				if(isKeyline < 2){
+					if(line.equals("")){
+						isKeyline += 1;
+						continue;
+					}
+					if(isKeyline == 1){
+						m=pattern.matcher(line);
+						Consequence consequence = new Consequence();
+						int tempc = 0;
+				        while(m.find()){
+				        	tempc++;
+				            if(tempc == 1){
+				            	consequence.setPrecision(Double.parseDouble(m.group(1)));
+				            }
+				            if(tempc == 2){
+				            	consequence.setRecall(Double.parseDouble(m.group(1)));
+				            }
+				            if(tempc == 3){
+				            	consequence.setFscore(Double.parseDouble(m.group(1)));
+				            }
+				            if(tempc == 4){
+				            	consequence.setSupport(Integer.parseInt(m.group(1)));
+				            	tempc = 0;
+				            }
+				        }
+				        consequences.add(consequence);
+	 				}
+				}
 			}
-//			System.out.println("拿回来的结果");
-//			for(String s:ls){
-//				System.out.println(s);
-//			}
-//			setLs(ls);
 			in.close();
 			pr.waitFor();
-			System.out.println("analysis_features end");
+			for(Consequence consequence:consequences){
+				System.out.println(consequence.getPrecision() + " " + consequence.getRecall() + " " + consequence.getFscore() + " " + consequence.getSupport());
+			}
+		    this.setConsequences(consequences);
 			
+//			ObjectMapper objectMapper=new ObjectMapper();
+//			this.setConsequencesJsonStr(objectMapper.writeValueAsString(consequences));//把后台list转成jsonstring传到前端处理
+//			System.out.println(consequencesJsonStr);
+			System.out.println("java analysis_features end");
 		} catch (Exception e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
 		}
-	}
-	public List<String> getLs() {
-		return ls;
-	}
-	public void setLs(List<String> ls) {
-		this.ls = ls;
 	}
 	public String getC() {
 		return C;
@@ -161,4 +187,16 @@ public class SupportVectorMachine extends ActionSupport {
 	public void setPretreatment(String[] pretreatment) {
 		this.pretreatment = pretreatment;
 	}
+	public List<Consequence> getConsequences() {
+        return consequences;
+    }
+    public void setConsequences(List<Consequence> consequences) {
+        this.consequences = consequences;
+    }
+	public String getConsequencesJsonStr() {
+        return consequencesJsonStr;
+    }
+    public void setConsequencesJsonStr(String consequencesJsonStr) {
+        this.consequencesJsonStr = consequencesJsonStr;
+    }
 }
