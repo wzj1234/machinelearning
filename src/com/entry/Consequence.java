@@ -2,10 +2,17 @@ package com.entry;
 
 public class Consequence {
 //	precision    recall  f1-score   support
+	private String title;
 	private double precision;
 	private double recall;
 	private double fscore;
 	private int support;
+	public String getTitle() {
+		return title;
+	}
+	public void setTile(String title) {
+		this.title = title;
+	}
 	public double getPrecision() {
         return precision;
     }

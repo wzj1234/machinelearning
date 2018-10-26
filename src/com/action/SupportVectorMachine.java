@@ -88,12 +88,14 @@ public class SupportVectorMachine extends ActionSupport {
 						continue;
 					}
 					if(isKeyline == 1){
+//						System.out.println(line);
 						m=pattern.matcher(line);
 						Consequence consequence = new Consequence();
 						int tempc = 0;
 				        while(m.find()){
 				        	tempc++;
 				            if(tempc == 1){
+				            	consequence.setTile(replaceSpace(line.split(m.group(1))[0]));
 				            	consequence.setPrecision(Double.parseDouble(m.group(1)));
 				            }
 				            if(tempc == 2){
@@ -113,9 +115,9 @@ public class SupportVectorMachine extends ActionSupport {
 			}
 			in.close();
 			pr.waitFor();
-//			for(Consequence consequence:consequences){
-//				System.out.println(consequence.getPrecision() + " " + consequence.getRecall() + " " + consequence.getFscore() + " " + consequence.getSupport());
-//			}
+			for(Consequence consequence:consequences){
+				System.out.println(consequence.getTitle() + " " + consequence.getPrecision() + " " + consequence.getRecall() + " " + consequence.getFscore() + " " + consequence.getSupport());
+			}
 		    this.setConsequences(consequences);
 			
 //			ObjectMapper objectMapper=new ObjectMapper();
@@ -126,6 +128,23 @@ public class SupportVectorMachine extends ActionSupport {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
 		}
+	}
+	public String replaceSpace(String str) {
+		int head = 0;
+		int tail = str.length()-1;
+		while(head <= tail){
+			if(str.charAt(head) != ' '){
+				break;
+			}
+			head++;
+		}
+		while(tail >= 0){
+			if(str.charAt(tail) != ' '){
+				break;
+			}
+			tail--;
+		}
+		return str.substring(head, tail+1);
 	}
 	public String getC() {
 		return C;

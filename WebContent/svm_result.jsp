@@ -167,38 +167,54 @@
 	    ],
 	    function (ec) {
 	        var myChart = ec.init(document.getElementById('main')); 
-	        var consequences = "${consequences}";
-	        var array = new Array();
+	        var arrayxAxis = new Array();
 			var arrayPrecision = new Array();
 			var arrayRecall = new Array();
 			var arrayFscore = new Array();
-			for (var i=1;i<=consequences.length;i++)
-			{
-				array[i-1] = "Stage " + i;
-			}
+			var loc = 0;
+			<c:forEach items="${consequences}" var="t" varStatus="status">
+				loc = ${status.index};
+				arrayxAxis[loc] = "${t.title}";		
+				arrayPrecision[loc] = ${t.precision};
+				arrayRecall[loc] = ${t.recall};
+				arrayFscore[loc] = ${t.fscore};
+    		</c:forEach>
+    		
 	        var option = {
 	            tooltip: {
 	                show: true
 	            },
 	            legend: {
-	                data:['销量']
+	                data:['precision', 'recall', 'f1-score']
 	            },
 	            xAxis : [
 	                {
 	                    type : 'category',
-	                    data : array
+	                    data : arrayxAxis
 	                }
 	            ],
 	            yAxis : [
 	                {
-	                    type : 'value'
+	                    type : 'value',
+	                    max: 1,
+	                    min: 0
 	                }
 	            ],
 	            series : [
 	                {
-	                    "name":"销量",
+	                    "name":"precision",
 	                    "type":"bar",
-	                    "data":[5, 20, 40, 10]
+	                    "data":arrayPrecision
+	                },
+	                {
+	                    "name":"recall",
+	                    "type":"bar",
+	                    "data":arrayRecall
+	                },
+	                {
+	                    "name":"f1-score",
+	                    "type":"bar",
+	                    "data":arrayFscore
 	                }
 	            ]
 	        };
@@ -237,7 +253,7 @@
 			<c:forEach items="${consequences}" var="t" varStatus="status">
 				<tr bgcolor="${status.index%2 == 0?'#D0D8E8':'#E9EDF4'}">     
 					<td align="center">
-						Stage ${status.index + 1}
+						${t.title}
 					</td>
 					<td align="center">
 						${t.precision}
