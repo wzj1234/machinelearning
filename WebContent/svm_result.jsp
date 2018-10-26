@@ -163,7 +163,8 @@
 	require(
 	    [
 	        'echarts',
-	        'echarts/chart/bar'
+	        'echarts/chart/bar',
+	        'echarts/chart/line'
 	    ],
 	    function (ec) {
 	        var myChart = ec.init(document.getElementById('main')); 
@@ -171,6 +172,7 @@
 			var arrayPrecision = new Array();
 			var arrayRecall = new Array();
 			var arrayFscore = new Array();
+			var arraySupport = new Array();
 			var loc = 0;
 			<c:forEach items="${consequences}" var="t" varStatus="status">
 				loc = ${status.index};
@@ -178,43 +180,149 @@
 				arrayPrecision[loc] = ${t.precision};
 				arrayRecall[loc] = ${t.recall};
 				arrayFscore[loc] = ${t.fscore};
+				arraySupport[loc] = ${t.support};
     		</c:forEach>
     		
 	        var option = {
+        		title: {
+                    text: 'svm模型指标展示图',      //主标题
+                    itemGap: 15,
+                    textStyle:{
+                        color:'#019858',        //颜色
+                        type: 'solid',
+                        fontStyle:'normal',     //风格
+                        fontWeight:'bolder',    //粗细
+                        fontFamily:'Microsoft yahei',   //字体
+                        fontSize:22,     //大小
+                        align:'center'   //水平对齐
+                    }
+                },
 	            tooltip: {
 	                show: true
 	            },
 	            legend: {
-	                data:['precision', 'recall', 'f1-score']
+	                data:['precision', 'recall', 'f1-score', 'support'],
+	                textStyle:{  
+                        type: 'solid',
+                        fontSize:'16'
+                    }
 	            },
 	            xAxis : [
 	                {
 	                    type : 'category',
-	                    data : arrayxAxis
+	                    data : arrayxAxis,
+	                    axisLabel:{  
+	                        textStyle:{  
+	                            color:"black",
+		                        type: 'solid',
+                                fontSize:'18'
+	                        }  
+	                    },
+	    				axisLine : {
+		                    show: true,
+		                    lineStyle: {
+		                        color: 'black',
+		                        type: 'solid',
+		                        width: 2
+		                    }
+		                }
 	                }
 	            ],
 	            yAxis : [
 	                {
 	                    type : 'value',
+	                    name: 'rate',
+	                    nameTextStyle:{
+	                    	color:"#02DF82",
+	                    	fontSize:20
+	                    },
+	                    scale: true,
 	                    max: 1,
-	                    min: 0
+	                    min: 0,
+	                    axisLabel:{  
+	                        textStyle:{  
+	                            color:"black",
+		                        type: 'solid',
+                                fontSize:'16'
+	                        }  
+	                    },
+	    				axisLine : {
+		                    show: true,
+		                    lineStyle: {
+		                        color: 'black',
+		                        type: 'solid',
+		                        width: 2
+		                    }
+		                }
+	                },
+	                {
+	                    type: 'value',
+	                    name: 'support',
+	                    nameTextStyle:{
+	                    	color:"#02DF82",
+	                    	fontSize:20
+	                    },
+	                    splitLine:{show: false},
+	                    min: 0,
+	                    splitNumber:5,
+	                    axisLabel:{  
+	                        textStyle:{  
+	                            color:"black",
+		                        type: 'solid',
+                                fontSize:'16'
+	                        }  
+	                    },
+	    				axisLine : {
+		                    show: true,
+		                    lineStyle: {
+		                        color: 'black',
+		                        type: 'solid',
+		                        width: 2
+		                    }
+		                }
 	                }
 	            ],
 	            series : [
 	                {
-	                    "name":"precision",
-	                    "type":"bar",
-	                    "data":arrayPrecision
+	                    name:'precision',
+	                    type:'bar',
+	                    data:arrayPrecision,
+	                    itemStyle: {
+		        			normal: {
+		        				color: '#C48888'
+		        			}
+		        		}
 	                },
 	                {
-	                    "name":"recall",
-	                    "type":"bar",
-	                    "data":arrayRecall
+	                    name:'recall',
+	                    type:'bar',
+	                    data:arrayRecall,
+	                    itemStyle: {
+		        			normal: {
+		        				color: '#99CCFF'
+		        			}
+		        		}
 	                },
 	                {
-	                    "name":"f1-score",
-	                    "type":"bar",
-	                    "data":arrayFscore
+	                    name:'f1-score',
+	                    type:'bar',
+	                    data:arrayFscore,
+	                    itemStyle: {
+		        			normal: {
+		        				color: '#9999CC'
+		        			}
+		        		}
+	                },
+	                {
+	                	name:'support',
+	                    type:'line',
+	                    yAxisIndex:1,
+	                    data:arraySupport,
+	                    itemStyle: {
+		        			normal: {
+		        				color: '#FFD306'
+		        			}
+		        		}
 	                }
 	            ]
 	        };
@@ -232,45 +340,54 @@
 				<li><a href="ml_randomForest.jsp">随机森林</a></li>
 			</ul>
 		</nav>
-		支持向量机模型构建完成<br>
-
 		<table style="width:100%;border:1px white solid">  
-			<tr bgcolor="#4F81BD"style="color: #fff;">
-				<th style="text-align: center"></th>
-				<th style="text-align: center">
-					precision
-				</th>
-				<th style="text-align: center">
-					recall
-				</th>
-				<th style="text-align: center">
-					f1-score
-				</th>
-				<th style="text-align: center">
-					support
-				</th>
-			</tr>
-			<c:forEach items="${consequences}" var="t" varStatus="status">
-				<tr bgcolor="${status.index%2 == 0?'#D0D8E8':'#E9EDF4'}">     
-					<td align="center">
-						${t.title}
-					</td>
-					<td align="center">
-						${t.precision}
-					</td>
-					<td align="center">
-						${t.recall}
-					</td>
-					<td align="center">
-						${t.fscore}
-					</td>
-					<td align="center">
-						${t.support}
-					</td> 				
+			<thead>
+				<tr>
+					<th colspan="5" style="text-align: center; color: #019858;">
+						<h2>svm模型指标展示表</h2>
+					</th>
 				</tr>
-	    	</c:forEach>
+			</thead> 
+			<tbody>
+				<tr bgcolor="#019858" style="color: #fff;">
+					<th style="text-align: center"></th>
+					<th style="text-align: center">
+						precision
+					</th>
+					<th style="text-align: center">
+						recall
+					</th>
+					<th style="text-align: center">
+						f1-score
+					</th>
+					<th style="text-align: center">
+						support
+					</th>
+				</tr>
+				<c:forEach items="${consequences}" var="t" varStatus="status">
+					<tr bgcolor="${status.index%2 == 0?'#C1FFE4':'#E8FFF5'}">     
+						<th align="center" style="color: #019858;">
+							${t.title}
+						</th>
+						<td align="center">
+							${t.precision}
+						</td>
+						<td align="center">
+							${t.recall}
+						</td>
+						<td align="center">
+							${t.fscore}
+						</td>
+						<td align="center">
+							${t.support}
+						</td> 				
+					</tr>
+		    	</c:forEach>
+	    	</tbody>
     	</table>
 	</div>
+	<br>
+	<br>
 	<div id="main" style="height:400px"></div>
 	<!-- /#wrapper -->
 	<div class="fot_wrap">
