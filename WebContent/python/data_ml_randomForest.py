@@ -1,9 +1,7 @@
 import sys
 import json
-print("enter data_ml_randomForest.py")
 pythonPath = sys.argv[1]
 parameters = sys.argv[2].replace('[','').replace(']','').replace(' ','').split(",")
-print('parameters->',parameters)
 # get all parameters
 n_estimators, criterion, max_features, bootstrap, oob_score, n_jobs = parameters;
 
@@ -39,9 +37,6 @@ except ValueError:
 	n_jobs = 1
 
 # #----------------------------------------------------------------------------
-print("这些参数分别是：")
-print(n_estimators,criterion,max_features,bootstrap,oob_score,n_jobs)
-print(type(n_estimators),type(criterion),type(max_features),type(bootstrap),type(oob_score),type(n_jobs))
 with open(pythonPath+'/sample_X_final.json','r') as f:
 	sample=json.load(f)
 # print(len(sample))
@@ -61,12 +56,9 @@ expected = y_test
 # predicted = classifier.predict(X_test_std)
 predicted = classifier.predict(X_test)
 
-print("expected","predicted")
-for i in range(len(expected)):
-	print(expected[i],'    ',predicted[i])
-
 accuracy = metrics.accuracy_score(expected,predicted)
 print(accuracy)
+print(classifier.get_params())
 print(metrics.classification_report(expected,predicted))
 # n_samples = len(sample)
 # from sklearn import svm,metrics

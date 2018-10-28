@@ -73,6 +73,7 @@ print(accuracy)
 # classifier.fit(sample[:n_samples//2],stage[:n_samples//2])      #使用两个斜杠可以得到整数结果
 # expected = stage[n_samples//2:]
 # predicted = classifier.predict(sample[n_samples//2:])
-
-print("classifier report report for classifier %s:\n%s\n"%(classifier,metrics.classification_report(expected,predicted)))
+print(classifier.get_params())
+print(metrics.classification_report(expected,predicted))
+# print("classifier report report for classifier %s:\n%s\n"%(classifier,metrics.classification_report(expected,predicted)))
 # print("Confusion matrix :\n%s"%metrics.confusion_matrix(expected,predicted))
