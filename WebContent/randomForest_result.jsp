@@ -157,7 +157,7 @@
 				<li><a href="index.jsp">返回首页</a></li>
 				<li><a href="mlselect.jsp">决策树（decition tree）</a></li>
 				<li><a href="ml_svm.jsp">支持向量机（SVM）</a></li>
-				<li class="current_page"><a href="ml_randomForest.jsp">逻辑回归</a></li>
+				<li class="current_page"><a href="ml_randomForest.jsp">随机森林</a></li>
 			</ul>
 		</nav>
 	</div>
