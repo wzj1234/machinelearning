@@ -4,9 +4,12 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.struts2.ServletActionContext;
 
+import com.entry.Consequence;
 import com.opensymphony.xwork2.ActionSupport;
 import com.preprocessing.Pretreatment;
 
@@ -19,7 +22,7 @@ public class RandomForest extends ActionSupport {
 	private String n_jobs;
 	private String[] pretreatment;
 	public List<String> paramlist;
-	
+	List<Consequence> consequences = new ArrayList<>();
 	public String execute(){
 		System.out.println("enter RandomForest");
 		try {
@@ -64,11 +67,44 @@ public class RandomForest extends ActionSupport {
 			Process pr = Runtime.getRuntime().exec(args);
 			BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream()));
 			String line;
+			int isKeyline = 0;
+			Pattern pattern = Pattern.compile("([0-9]\\d*\\.?\\d*)");
+			Matcher m;
 			List<String> ls = new ArrayList<String>();
 			while((line = in.readLine()) != null){
 //                line = decodeUnicode(line);
 //				ls.add(line);
 				System.out.println(line);
+				if(isKeyline < 2){
+					if(line.equals("")){
+						isKeyline += 1;
+						continue;
+					}
+					if(isKeyline == 1){
+//						System.out.println(line);
+						m=pattern.matcher(line);
+						Consequence consequence = new Consequence();
+						int tempc = 0;
+				        while(m.find()){
+				        	tempc++;
+				            if(tempc == 1){
+				            	consequence.setTile(replaceSpace(line.split(m.group(1))[0]));
+				            	consequence.setPrecision(Double.parseDouble(m.group(1)));
+				            }
+				            if(tempc == 2){
+				            	consequence.setRecall(Double.parseDouble(m.group(1)));
+				            }
+				            if(tempc == 3){
+				            	consequence.setFscore(Double.parseDouble(m.group(1)));
+				            }
+				            if(tempc == 4){
+				            	consequence.setSupport(Integer.parseInt(m.group(1)));
+				            	tempc = 0;
+				            }
+				        }
+				        consequences.add(consequence);
+	 				}
+				}
 			}
 //			System.out.println("拿回来的结果");
 //			for(String s:ls){
@@ -77,7 +113,11 @@ public class RandomForest extends ActionSupport {
 //			setLs(ls);
 			in.close();
 			pr.waitFor();
-			System.out.println("analysis_features end");
+			for(Consequence consequence:consequences){
+				System.out.println(consequence.getTitle() + " " + consequence.getPrecision() + " " + consequence.getRecall() + " " + consequence.getFscore() + " " + consequence.getSupport());
+			}
+		    this.setConsequences(consequences);
+			System.out.println("analysis_features random forest end");
 			
 		} catch (Exception e) {
 			// TODO 自动生成的 catch 块
@@ -85,7 +125,23 @@ public class RandomForest extends ActionSupport {
 		}
 	}
 	
-
+	public String replaceSpace(String str) {
+		int head = 0;
+		int tail = str.length()-1;
+		while(head <= tail){
+			if(str.charAt(head) != ' '){
+				break;
+			}
+			head++;
+		}
+		while(tail >= 0){
+			if(str.charAt(tail) != ' '){
+				break;
+			}
+			tail--;
+		}
+		return str.substring(head, tail+1);
+	}
 	public String[] getPretreatment() {
 		return pretreatment;
 	}
@@ -128,4 +184,10 @@ public class RandomForest extends ActionSupport {
 	public void setN_jobs(String n_jobs) {
 		this.n_jobs = n_jobs;
 	}
+	public List<Consequence> getConsequences() {
+        return consequences;
+    }
+    public void setConsequences(List<Consequence> consequences) {
+        this.consequences = consequences;
+    }
 }
