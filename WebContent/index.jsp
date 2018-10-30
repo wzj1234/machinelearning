@@ -137,6 +137,14 @@
 		}
 	</style>
 </head>
+<script type="text/javascript">
+	function Download_step1(){
+	    window.location.href="DownloadManualStep1";
+	}
+	function Download_step3(){
+	    window.location.href="DownloadManualStep3";
+	}
+</script>
 <body style="height:100%;">
 	<div class="top">
 		<div class="logo">
@@ -178,9 +186,19 @@
 		    </div>
 		</div>
 		<div class="jumbotron">
-			<p style="font-size:13px">
-				此处导入特征文件，格式为行名为特征名（如ABO|28），列名为样本编号或者样本名（如TCGA-A6-2672-01），请按照格式上传。
-			</p>
+			<div>
+				<p style="font-size:13px">
+					此处导入特征文件，格式为行名为特征名（如ABO|28），列名为样本编号或者样本名（如TCGA-A6-2672-01），请按照格式上传。
+				</p>
+			</div>
+			<div style="width:60%">
+				<div style="width:30%; float:left; display:inline">
+					<button onclick="Download_step1()" type="button" class="btn btn-default btn-block btn-success" >第一步特征文件示例</button>
+				</div>
+				<div style="width:30%; float:right; display:inline">
+					<button onclick="Download_step3()" type="button" class="btn btn-default btn-block btn-success" >第三步上传数据示例</button>
+				</div>
+			</div>
 		</div>
 		<div class="main">
 			<h3 class="text-center ">

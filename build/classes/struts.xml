@@ -24,6 +24,14 @@
 		<action name="test" class="com.action.test">
 			<result name="success">test.jsp</result>
 		</action>
+		<action name="DownloadManualStep1" class="com.action.DownloadManualStep1">
+			<result name="SUCCESS">index.jsp</result>
+			<result name="IOE">filenotfound.jsp</result>
+		</action>
+		<action name="DownloadManualStep3" class="com.action.DownloadManualStep3">
+			<result name="SUCCESS">index.jsp</result>
+			<result name="IOE">filenotfound.jsp</result>
+		</action>
 		
 	</package>
 	<include file="file.xml"/>

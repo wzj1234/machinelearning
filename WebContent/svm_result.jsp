@@ -185,7 +185,7 @@
     		
 	        var option = {
         		title: {
-                    text: 'svm模型指标展示图',      //主标题
+                    text: 'SVM模型指标展示图',      //主标题
                     itemGap: 15,
                     textStyle:{
                         color:'#019858',        //颜色
@@ -344,7 +344,7 @@
 			<thead>
 				<tr>
 					<th colspan="5" style="text-align: center; color: #019858;">
-						<h2>svm模型指标展示表</h2>
+						<h2>SVM模型指标展示表</h2>
 					</th>
 				</tr>
 			</thead> 
