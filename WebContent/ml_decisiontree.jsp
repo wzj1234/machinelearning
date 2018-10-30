@@ -134,12 +134,38 @@
 		font-style: italic; color: #888; 
 	}
 	
+	.isShowClass{
+	    position: relative;
+	    left: 36%;
+	    bottom: 20%;
+	}
 </style>
 </head>
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">  
+<script src="js/bootstrap.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="echarts-2.2.7/build/dist/echarts.js"></script> 
 <script type="text/JavaScript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="js/jquery.media.js"></script>
 <script type="text/javascript">
-
+	$(function() {  
+	 	$('a.media').media({width:1200,height:800});
+	 	showPdf();
+	 }); 
+	
+	function showPdf(){
+		$("#showPdfId").hide();
+		$("#pdfId").show();
+		$("#unshowPdfId").show();
+	}
+	
+	function unshowPdf(){
+		$("#showPdfId").show();
+		$("#pdfId").hide();
+		$("#unshowPdfId").hide();
+	}
+ 
 	require.config({
 	    paths: {
 	        echarts: 'echarts-2.2.7/build/dist'
@@ -170,16 +196,16 @@
     		
 	        var option = {
         		title: {
-                    text: '决策树模型指标展示图',      //主标题
+                    text: '决策树模型指标展示图',
                     itemGap: 15,
                     textStyle:{
-                        color:'#019858',        //颜色
+                        color:'#019858',
                         type: 'solid',
-                        fontStyle:'normal',     //风格
-                        fontWeight:'bolder',    //粗细
-                        fontFamily:'Microsoft yahei',   //字体
-                        fontSize:22,     //大小
-                        align:'center'   //水平对齐
+                        fontStyle:'normal',
+                        fontWeight:'bolder',
+                        fontFamily:'Microsoft yahei',
+                        fontSize:22,
+                        align:'center'
                     }
                 },
 	            tooltip: {
@@ -325,17 +351,9 @@
 				<li><a href="ml_randomForest.jsp">随机森林</a></li>
 			</ul>
 		</nav>
-		
-		<a class="media" href="./python/decisiontree.pdf">结果文件</a>
-		
 	</div>
-	<!-- /#wrapper -->
-	<div class="fot_wrap">
-		<div class="footer"> 
-		</div>
-	</div>
-	
-	<table style="width:100%;border:1px white solid">  
+	<div>
+		<table style="width:100%;border:1px white solid">  
 			<thead>
 				<tr>
 					<th colspan="5" style="text-align: center; color: #019858;">
@@ -380,18 +398,24 @@
 		    	</c:forEach>
 	    	</tbody>
     	</table>
+    </div>
+    <br>
+	<br>
+    <div id="main" style="height:400px"></div>
+    <div id="showPdfId" class="isShowClass" style="width:30%;">
+		<button onclick="showPdf()" type="button" class="btn btn-default btn-block btn-success">查看决策树模型示意图</button>
+	</div>
+	<div id="unshowPdfId" class="isShowClass" style="width:30%; display:none">
+		<button onclick="unshowPdf()" type="button" class="btn btn-default btn-block btn-success">关闭决策树模型示意图</button>
 	</div>
 	<br>
-	<br>
-	<div id="main" style="height:400px"></div>
-	
-	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
-	<script type="text/javascript" src="js/jquery.media.js"></script>
-	<script type="text/javascript">
-	 $(function() {  
-	 	$('a.media').media({width:1200,height:800});
-	 }); 
-	</script>
-	
+	<div id="pdfId" style="display:none">
+		<a class="media" href="./python/decisiontree.pdf"></a>
+	</div>
+	<!-- /#wrapper -->
+	<div class="fot_wrap">
+		<div class="footer"> 
+		</div>
+	</div>
 </body>
 </html>
